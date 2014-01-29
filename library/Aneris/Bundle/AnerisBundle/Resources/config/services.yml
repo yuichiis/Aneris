@@ -1,0 +1,44 @@
+parameters:
+    aneris.container.module_manager.class: Aneris\Container\ModuleManager
+    aneris.container.module_manager_factory.class: Aneris\Bundle\AnerisBundle\DependencyInjection\ModuleManagerFactory
+    aneris.container.module_manager.config_path: "%kernel.root_dir%/config/aneris.php"
+    aneris.container.service_locator.class: Aneris\Container\Container
+    aneris.container.service_locator_factory.class: Aneris\Bundle\AnerisBundle\DependencyInjection\ServiceLocatorFactory
+    aneris.i18n.translator.class: Aneris\Stdlib\I18n\Gettext
+    aneris.i18n.translator.proxy.class: Aneris\Bundle\AnerisBundle\DependencyInjection\TranslatorProxy
+    aneris.validator.validator.class: Aneris\Validator\Validator
+    aneris.validator.validator_factory.class: Aneris\Bundle\AnerisBundle\DependencyInjection\ValidatorFactory
+    aneris.form.form_context_builder.class: Aneris\Form\FormContextBuilder
+    aneris.form.view.form_renderer.class: Aneris\Form\View\FormRenderer
+    aneris.form.themes: null
+    aneris.form.translator_text_domain: null
+
+services:
+    aneris.container.module_manager:
+        class: %aneris.container.module_manager.class%
+        factory_class: %aneris.container.module_manager_factory.class%
+        factory_method: factory
+        arguments: ["@service_container","%aneris.container.module_manager.config_path%", "%kernel.environment%"]
+    aneris.container.service_locator:
+        class: %aneris.container.service_locator.class%
+        factory_class: %aneris.container.service_locator_factory.class%
+        factory_method: factory
+        arguments: ["@aneris.container.module_manager"]
+    aneris.i18n.translator.service:
+        class: %aneris.i18n.translator.class%
+        calls:
+            - [setLocale, [%locale%]]
+    aneris.i18n.translator.proxy.service:
+        class: %aneris.i18n.translator.proxy.class%
+        arguments: ["@translator"]
+    aneris.validator.validator.service:
+        class: %aneris.validator.validator.class%
+        factory_class: %aneris.validator.validator_factory.class%
+        factory_method: factory
+        arguments: ["@aneris.i18n.translator.service"]
+    aneris.form.context_builder.service:
+        class: %aneris.form.form_context_builder.class%
+        arguments: [null,"@aneris.validator.validator.service"]
+    aneris.form.renderer.service:
+        class: %aneris.form.view.form_renderer.class%
+        arguments: [%aneris.form.themes%,"@aneris.i18n.translator.proxy.service","%aneris.form.translator_text_domain%"]
