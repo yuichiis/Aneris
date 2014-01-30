@@ -1,0 +1,25 @@
+{
+    "name": "aneris/aneris",
+    "type": "library",
+    "description": "Aneris PHP framework",
+    "keywords": ["framework"],
+    "homepage": "https://github.com/yuichiis/Aneris",
+    "license": "Apache2.0",
+    "authors": [
+        {
+            "name": "Yuichi Ishikawa",
+            "email": "yuichiis.pub@gmail.com"
+        },
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "doctrine/orm": "2.4.*",
+        "twig/extensions": "1.*",
+        "symfony/symfony": "2.4.*",
+        "symfony/monolog-bundle": "2.4.*",
+        "symfony/assetic-bundle": "~2.3",
+        "symfony/swiftmailer-bundle": "~2.3",
+        "zendframework/zendframework": ">2.2.0rc1",
+        "doctrine/doctrine-orm-module": "*"
+    }
+}
