@@ -5,6 +5,6 @@ php:
 
 before_script:
   - composer --prefer-source --dev install
-  - cd tests; mkdir data; ../vendor/bin/doctrine orm:schema-tool:create
+  - ( cd tests; mkdir data; ../vendor/bin/doctrine orm:schema-tool:create )
 
 script: phpunit -c tests
