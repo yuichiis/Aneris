@@ -91,13 +91,13 @@ class Gettext
             if($this->currentLocale===false) {
                 putenv(self::ENVIRONMENT_VAR);
                 if(defined("LC_MESSAGES")) {
-                    setlocale(self::ENVIRONMENT_VAR, null);
+                    setlocale(LC_MESSAGES, null);
                 }
             }
             else {
                 putenv(self::ENVIRONMENT_VAR.'='.$this->currentLocale);
                 if(defined("LC_MESSAGES")) {
-                    setlocale(self::ENVIRONMENT_VAR, null);
+                    setlocale(LC_MESSAGES, null);
                 }
             }
         }
