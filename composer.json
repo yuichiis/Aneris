@@ -3,14 +3,7 @@
     "type": "library",
     "description": "Aneris PHP framework",
     "keywords": ["framework"],
-    "homepage": "https://github.com/yuichiis/Aneris",
     "license": "Apache2.0",
-    "authors": [
-        {
-            "name": "Yuichi Ishikawa",
-            "email": "yuichiis.pub@gmail.com"
-        },
-    ],
     "require": {
         "php": ">=5.3.3",
         "doctrine/orm": "2.4.*",
