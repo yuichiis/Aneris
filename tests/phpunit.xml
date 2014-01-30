@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit bootstrap="Bootstrap.php">
+    <testsuites>
+        <testsuite name="anerisalltest">
+            <directory>./Aneris</directory>
+            <directory>./AnerisBundle/src/*/*Bundle/Tests</directory>
+            <directory>./AnerisZFModule</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
