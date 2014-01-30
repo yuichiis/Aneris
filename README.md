@@ -33,7 +33,7 @@ Documentation
 -------------
 You will see soon.
 I can write English a little.
-I'd like to help me to write in English.
+I need your help to write in English.
 
 
 Components
@@ -76,7 +76,7 @@ Form Component is constituted Form Context Builder and Form Renderer.
   * Form Renderer draw HTML form element the Form Object Structure and the Form Theme.
 
 ### MVC Component
-Form Component is constituted MVC Application Manager.
+MVC Component is constituted MVC Application Manager.
 
   * When you want to use Aneris standalone without other frameworks (ZF2 and Symfony and something), You can use MVC Application Manager. This Manager can be configured to use "Annotation". And it can use the Dependency Injection without being aware of DI Container.
 
