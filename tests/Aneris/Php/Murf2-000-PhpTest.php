@@ -134,7 +134,7 @@ class PhpTest extends \PHPUnit_Framework_TestCase
 
 	public function testStringControlCode()
 	{
-        $this->assertTrue(false);
+        //$this->assertTrue(false);
 		//echo '\0';
 		//echo "\0";
 		//echo '\x00';
