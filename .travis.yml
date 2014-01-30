@@ -1,9 +1,10 @@
 language: php
 
 php:
-  - 5.3.3
   - 5.4
 
-before_script: composer install -n
+before_script:
+  - composer --prefer-source --dev install
+  - cd tests; ../vendor/bin/doctrine orm:schema-tool:create
 
 script: phpunit -c tests

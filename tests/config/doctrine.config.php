@@ -6,7 +6,7 @@ return array(
                 ),
             ),
             'doctrine' => array(
-                'paths' => array(__DIR__.'/../test/AcmeTest/Doctrine1/Entity'),
+                'paths' => array(__DIR__.'/../resources/AcmeTest/Doctrine1/Entity'),
                 'is_devmode' => false,
                 'connection' => array(
                     'driver' => 'pdo_sqlite',
