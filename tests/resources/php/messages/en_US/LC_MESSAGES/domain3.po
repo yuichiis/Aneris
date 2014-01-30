@@ -1,0 +1,27 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: test\n"
+"POT-Creation-Date: 2013-10-29 18:40+0900\n"
+"PO-Revision-Date: 2013-12-08 10:22+0900\n"
+"Last-Translator: test <test@test.com>\n"
+"Language-Team: test\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;translate\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: ../../../..\n"
+
+#: ../../../../Murf2-000-PhpTest.php:110 ../../../../Murf2-000-PhpTest.php:114
+#: ../../../../Murf2-000-PhpTest.php:120 ../../../../Murf2-000-PhpTest.php:126
+#: ../../../../Murf2-000-PhpTest.php:134 ../../../../Murf2-000-PhpTest.php:141
+msgid "{aneris.test.phptest.gettext.messages}"
+msgstr "Welcome to My PHP Application"
+
+#: ../../../../Murf2-021-GettextTest.php:20
+#: ../../../../Murf2-021-GettextTest.php:23
+msgid "{aneris.test.gettext.domain1.messages}"
+msgstr "gettext translation test textdomain:domain3 locale:en_US"

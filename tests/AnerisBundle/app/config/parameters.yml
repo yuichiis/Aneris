@@ -1,0 +1,7 @@
+parameters:
+    locale: en
+    secret: ThisTokenIsNotSoSecretChangeIt
+    aneris.form.themes:
+        default: "Aneris\Form\View\Theme\Foundation5Horizontal"
+        bootstrap: "Aneris\Form\View\Theme\Bootstrap\3Horizontal"
+        foundation: "Aneris\Form\View\Theme\Foundation5Horizontal"

@@ -1,0 +1,17 @@
+AcmTest\MvcRouter\home:
+    path: '/'
+    defaults:
+        controller: 'Index'
+        action: 'index'
+    type: 'segment'
+    options:
+        parameters: {'action', 'id'}
+
+AcmTest\MvcRouter\foo:
+    path: '/foo'
+    defaults:
+        controller: 'Boo'
+        action: 'index'
+    type: 'segment'
+    options:
+        parameters: {'action', 'id'}

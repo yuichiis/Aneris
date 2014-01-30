@@ -1,0 +1,2 @@
+Other Layout
+<?= $this->content ?>
