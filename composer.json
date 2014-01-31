@@ -13,6 +13,8 @@
         "symfony/assetic-bundle": "~2.3",
         "symfony/swiftmailer-bundle": "~2.3",
         "zendframework/zendframework": ">2.2.0rc1",
-        "doctrine/doctrine-orm-module": "*"
-    }
+        "doctrine/doctrine-orm-module": "*",
+        "michelf/php-markdown": "*"
+    },
+    "minimum-stability": "dev"
 }

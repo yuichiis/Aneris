@@ -1,5 +1,4 @@
 vendor/
-*.mo
 *.log
 composer.lock
 composer.phar

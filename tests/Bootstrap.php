@@ -7,6 +7,7 @@ $loader->add('SfTest',   __DIR__ . '/AnerisBundle/src');
 define('ANERIS_TEST_RESOURCES',__DIR__.'/resources');
 define('ANERIS_TEST_DATA',     __DIR__.'/data');
 define('ANERIS_TEST_CONFIG',   __DIR__.'/config');
+define('ANERIS_REPOSITORY_ROOT',   __DIR__.'/..');
 
 global $_SERVER;
 $_SERVER["KERNEL_DIR"] = __DIR__.'/AnerisBundle/app/';
