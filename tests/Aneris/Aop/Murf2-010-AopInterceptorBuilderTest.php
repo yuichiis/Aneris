@@ -6,6 +6,9 @@ use Aneris\Aop\InterceptorBuilder;
 use Aneris\Stdlib\Cache\CacheFactory;
 use ArrayObject;
 
+use AcmeTest\Aop\TestArrayCallableInterface;
+use AcmeTest\Aop\HaveArrayCallableClass;
+
 interface TestInterface
 {
     public function bar(TestInterface $value=null);
@@ -17,9 +20,9 @@ interface TestInterface2
 interface TestSubInterface extends TestInterface
 {}
 
-interface TestArrayCallableInterface
+interface TestArrayInterface
 {
-    public function foo(array $array,callable $callable);
+    public function foo(array $array);
 }
 
 class DontHaveInterfeceClass
@@ -68,9 +71,9 @@ class HaveSubInterfaceClass implements TestSubInterface
         # code...
     }
 }
-class HaveArrayCallableClass implements TestArrayCallableInterface
+class HaveArrayClass implements TestArrayInterface
 {
-    public function foo(array $array,callable $callable)
+    public function foo(array $array)
     {
 
     }
@@ -228,13 +231,38 @@ class HaveSubInterfaceClassIFInterceptor extends Interceptor implements \AnerisT
 EOD;
         $this->assertEquals($result,$builder->getInterfaceBasedInterceptorDeclare($className,'interface'));
 
-        $className = 'AnerisTest\AopInterceptorBuilderTest\HaveArrayCallableClass';
+        $className = 'AnerisTest\AopInterceptorBuilderTest\HaveArrayClass';
         $builder = new InterceptorBuilder();
         $result = <<<EOD
 <?php
 namespace AnerisTest\AopInterceptorBuilderTest;
 use Aneris\Aop\Interceptor;
-class HaveArrayCallableClassIFInterceptor extends Interceptor implements \AnerisTest\AopInterceptorBuilderTest\TestArrayCallableInterface
+class HaveArrayClassIFInterceptor extends Interceptor implements \AnerisTest\AopInterceptorBuilderTest\TestArrayInterface
+{
+
+    public function foo(array \$array)
+    {
+        return \$this->__call('foo', array(\$array));
+    }
+}
+EOD;
+        $this->assertEquals($result,$builder->getInterfaceBasedInterceptorDeclare($className,'interface'));
+
+    }
+
+    /**
+     * @requires PHP 5.4.0
+     */
+    public function testGetCallableClassDeclare()
+    {
+        require_once ANERIS_TEST_RESOURCES.'/AcmeTest/Aop/class_with_callable.php';
+        $className = 'AcmeTest\Aop\HaveArrayCallableClass';
+        $builder = new InterceptorBuilder();
+        $result = <<<EOD
+<?php
+namespace AcmeTest\Aop;
+use Aneris\Aop\Interceptor;
+class HaveArrayCallableClassIFInterceptor extends Interceptor implements \AcmeTest\Aop\TestArrayCallableInterface
 {
 
     public function foo(array \$array,callable \$callable)
@@ -244,7 +272,6 @@ class HaveArrayCallableClassIFInterceptor extends Interceptor implements \Aneris
 }
 EOD;
         $this->assertEquals($result,$builder->getInterfaceBasedInterceptorDeclare($className,'interface'));
-
     }
 
     public function testGetFileName()

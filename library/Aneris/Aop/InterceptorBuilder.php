@@ -125,7 +125,8 @@ EOD;
 
             if($paramRef->isArray()) {
                 $paramTypes .= 'array ';
-            } else if($paramRef->isCallable()) {
+            } else if(version_compare(PHP_VERSION, '5.4.0') >= 0 &&
+                        $paramRef->isCallable()) {
                 $paramTypes .= 'callable ';
             } else {
                 try {

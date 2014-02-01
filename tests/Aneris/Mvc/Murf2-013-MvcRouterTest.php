@@ -815,11 +815,11 @@ class MvcRouterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/bar',$path);
     }
 
-
+    /**
+     * @requires extension yaml
+     */
     public function testYamlConfig()
     {
-        if(!extension_loaded('yaml'))
-            return;
         //$yaml = <<<EOD
 //routes: 
 //    %__INCLUDE(%__DIR__%/AcmeTest/MvcRouter/config/routing.yml)__%

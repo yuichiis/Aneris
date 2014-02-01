@@ -28,9 +28,6 @@ class GettextTest extends \PHPUnit_Framework_TestCase
     	$translator->bindTextDomain('domain1' ,ANERIS_TEST_RESOURCES.'/php/messages');
         $translator->setLocale('en_US');
         $translator->setTextDomain('domain1');
-        echo '['.getenv(Gettext::ENVIRONMENT_VAR).']';
-        if(defined("LC_MESSAGES"))
-            echo '['.LC_MESSAGES.']';
     	$result = $translator->translate("{aneris.test.gettext.domain1.messages}");
 		$this->assertEquals('gettext translation test textdomain:domain1 locale:en_US',$result);
 

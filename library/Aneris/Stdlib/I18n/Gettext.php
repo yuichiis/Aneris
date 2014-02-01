@@ -97,7 +97,7 @@ class Gettext
             else {
                 putenv(self::ENVIRONMENT_VAR.'='.$this->currentLocale);
                 if(defined("LC_MESSAGES")) {
-                    setlocale(LC_MESSAGES, null);
+                    setlocale(LC_MESSAGES, $this->currentLocale);
                 }
             }
         }

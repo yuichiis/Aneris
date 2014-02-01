@@ -106,10 +106,11 @@ class PhpTest extends \PHPUnit_Framework_TestCase
 	//	$this->assertEquals('Aneris2PhpTest',$obj->getNamespace()) ;
 	//}
 
+    /**
+     * @requires extension apc
+     */
     public function testApcExtension()
     {
-        if(!extension_loaded('apc'))
-            return;
         $this->assertTrue(extension_loaded('apc'));
         $this->assertTrue(function_exists('apc_fetch'));
         $this->assertEquals('1',ini_get('apc.enable_cli'));
@@ -243,10 +244,12 @@ class PhpTest extends \PHPUnit_Framework_TestCase
         //echo serialize($a);
         //echo var_export($a);
     }
+
+    /**
+     * @requires extension yaml
+     */
     public function testYaml()
     {
-    	if(!extension_loaded('yaml'))
-    		return;
         $yaml = <<<EOD
 ---
 definitions:

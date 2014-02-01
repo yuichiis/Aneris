@@ -337,10 +337,11 @@ class MvcRoutingTableBuilderTest extends \PHPUnit_Framework_TestCase
         $routes = $builder->build()->getRoutes();
     }
 
+    /**
+     * @requires extension yaml
+     */
     public function testFileConfigYaml()
     {
-        if(!extension_loaded('yaml'))
-            return;
         $config = array(
             'config_files' => array(
                 'yaml' => array(
@@ -356,10 +357,11 @@ class MvcRoutingTableBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(isset($routes['AcmTest\MvcRouter\foo']));
     }
 
+    /**
+     * @requires extension yaml
+     */
     public function testFileConfigCustom()
     {
-        if(!extension_loaded('yaml'))
-            return;
         $config = array(
             'config_files' => array(
                 'MvcRoutingTableBuilderTest\\TestLoader::load' => array(
