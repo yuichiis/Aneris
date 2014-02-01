@@ -180,7 +180,8 @@ class PhpTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals('Welcome to My PHP Application',$text);
 		putenv("LC_MESSAGES=ja_JP");
 		if(defined("LC_MESSAGES")) {
-			setlocale(LC_MESSAGES, null);
+            echo '['.setlocale(LC_ALL, 'ja_JP').']';
+            echo '['.setlocale(LC_MESSAGES, 'ja_JP').']';
 		}
 		$text = gettext("{aneris.test.phptest.gettext.messages}");
 		$this->assertEquals('My PHP Application he youkoso',$text);
@@ -197,8 +198,8 @@ class PhpTest extends \PHPUnit_Framework_TestCase
 		putenv("LC_ALL=ja_JP");
 		putenv("LC_MESSAGES=en_US");
 		if(defined("LC_MESSAGES")) {
-			setlocale(LC_ALL, null);
-			setlocale(LC_MESSAGES, null);
+			echo '['.setlocale(LC_ALL, 'ja_JP').']';
+			echo '['.setlocale(LC_MESSAGES, 'ja_JP').']';
 		}
 		$text = gettext("{aneris.test.phptest.gettext.messages}");
 		$this->assertEquals('My PHP Application he youkoso',$text);
