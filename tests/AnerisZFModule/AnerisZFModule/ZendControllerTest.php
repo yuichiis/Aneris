@@ -6,8 +6,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Mvc\MvcEvent;
 
 use Aneris\Stdlib\Cache\CacheFactory;
-use Aneris\Stdlib\Entity\EntityInterface;
-use Aneris\Stdlib\Entity\EntityTrait;
+use Aneris\Stdlib\Entity\EntityAbstract;
 use Aneris\Form\Element as Form;
 use Aneris\Validator\Constraints as Assert;
 use Aneris\Container\Annotations\Inject;
@@ -16,9 +15,8 @@ use Aneris\Container\Annotations\Named;
 /**
  * @Form\Form(attributes={action="/app/form",method="post"})
  */
-class Entity implements EntityInterface
+class Entity extends EntityAbstract
 {
-    use EntityTrait;
     /**
      * @Form\Input(type="email",label="Email")
      * @Assert\Email
@@ -34,9 +32,8 @@ class Entity implements EntityInterface
     public $checkbox;
 }
 
-class Model
+class Model extends EntityAbstract
 {
-    use EntityTrait;
     /**
     * @Inject({@Named(value="EntityManager")})
     */

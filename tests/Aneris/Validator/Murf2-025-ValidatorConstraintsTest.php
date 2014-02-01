@@ -1,17 +1,15 @@
 <?php
 namespace AnerisTest\ValidatorConstraintsTest;
 
-use Aneris\Stdlib\Entity\EntityInterface;
-use Aneris\Stdlib\Entity\EntityTrait;
+use Aneris\Stdlib\Entity\EntityAbstract;
 use Aneris\Validator\Validator;
 
 // Test Target Classes are under the namespace flowing;
 use Aneris\Validator\Constraints as Assert;
 
 
-class Product implements EntityInterface
+class Product extends EntityAbstract
 {
-    use EntityTrait;
     /** @Assert\AssertTrue **/
     protected $assertTrue;
     /** @Assert\AssertFalse **/

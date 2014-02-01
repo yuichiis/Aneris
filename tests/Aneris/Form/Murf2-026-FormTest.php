@@ -3,7 +3,7 @@ namespace AnerisTest\FormTest;
 
 use Aneris\Stdlib\Cache\CacheFactory;
 use Aneris\Stdlib\Entity\EntityInterface;
-use Aneris\Stdlib\Entity\EntityTrait;
+use Aneris\Stdlib\Entity\EntityAbstract;
 use Aneris\Container\ModuleManager;
 use Aneris\Validator\Constraints as Assert;
 use Aneris\Mvc\PluginManager;
@@ -30,9 +30,8 @@ use Aneris\Form\FormContextBuilder;
 /**
  * @Form\Form(attributes={"action"="/app/form","method"="post"})
  */
-class Entity implements EntityInterface
+class Entity extends EntityAbstract
 {
-    use EntityTrait;
     /**
      * @Form\Input(type="email",label="Email")
      * @Assert\Email
@@ -62,9 +61,8 @@ class Entity2
 /**
  * @Form\Form(attributes={"action"="/app/form","method"="post"})
  */
-class Entity3 implements EntityInterface
+class Entity3 extends EntityAbstract
 {
-    use EntityTrait;
     /**
      * @Form\Input(type="email",label="Email Address")
      * @Assert\Email
@@ -88,9 +86,8 @@ class TestTranslator
     }
 }
 
-class ProductSymfony
+class ProductSymfony extends EntityAbstract
 {
-    use EntityTrait;
     /** @SymfonyAssert\GreaterThanOrEqual(10) **/
     public $id;
     /** @SymfonyAssert\GreaterThanOrEqual(10) **/

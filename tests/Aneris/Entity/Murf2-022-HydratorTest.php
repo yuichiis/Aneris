@@ -4,12 +4,12 @@ namespace AnerisTest\HydratorTest;
 use stdClass;
 
 // Test Target Classes
-use Aneris\Stdlib\Entity\EntityTrait;
 use Aneris\Stdlib\Entity\EntityAbstract;
-use Aneris\Stdlib\Entity\EntityInterface;
 use Aneris\Stdlib\Entity\EntityHydrator;
 use Aneris\Stdlib\Entity\ReflectionHydrator;
 use Aneris\Stdlib\Entity\PropertyHydrator;
+
+use AcmeTest\Entity\Bean2;
 
 class Product
 {
@@ -44,19 +44,6 @@ class Bean1 extends EntityAbstract
     // a getter is not defined for name
 }
 
-class Bean2 implements EntityInterface
-{
-    use EntityTrait;
-
-    protected $id;
-    protected $name;
-    private   $privateVar;
-    public function getId()
-    {
-        return $this->id;
-    }
-    // a getter is not defined for name
-}
 
 class Object1 
 {
@@ -163,8 +150,12 @@ class Aneris2HydratorTest extends \PHPUnit_Framework_TestCase
         $bean1->getPrivateVar();
     }
 
+    /**
+     * @requires PHP 5.4.0
+     */
     public function testHydratorBeanTrait()
     {
+        require_once ANERIS_TEST_RESOURCES.'/AcmeTest/Entity/entity_with_trait.php';
         $std = new stdClass();
         $std->id = 1;
         $std->name = 'abc';
@@ -194,31 +185,37 @@ class Aneris2HydratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @requires PHP 5.4.0
      * @expectedException        Aneris\Stdlib\Entity\Exception\DomainException
      * @expectedExceptionMessage a property is not found:abc
      */
     public function testHydratorBeanTraitNotFoundAccessViolationToRead()
     {
+        require_once ANERIS_TEST_RESOURCES.'/AcmeTest/Entity/entity_with_trait.php';
         $bean1 = new Bean2();
         $bean1->getAbc();
     }
 
     /**
+     * @requires PHP 5.4.0
      * @expectedException        Aneris\Stdlib\Entity\Exception\DomainException
      * @expectedExceptionMessage a property is not found:abc
      */
     public function testHydratorBeanTraitNotFoundAccessViolationToWrite()
     {
+        require_once ANERIS_TEST_RESOURCES.'/AcmeTest/Entity/entity_with_trait.php';
         $bean1 = new Bean2();
         $bean1->setAbc();
     }
 
     /**
+     * @requires PHP 5.4.0
      * @expectedException        Aneris\Stdlib\Entity\Exception\DomainException
      * @expectedExceptionMessage a property is read only:id
      */
     public function testHydratorBeanTraitReadOnlyAccessViolation()
     {
+        require_once ANERIS_TEST_RESOURCES.'/AcmeTest/Entity/entity_with_trait.php';
         $bean1 = new Bean2();
         $bean1->setId(100);
     }

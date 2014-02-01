@@ -2,7 +2,7 @@
 namespace AnerisTest\DiDefinitionTest;
 
 use Aneris\Annotation\AnnotationManager;
-use Aneris\Stdlib\Entity\EntityTrait;
+use Aneris\Stdlib\Entity\EntityAbstract;
 use Aneris\Stdlib\Entity\PropertyAccessPolicyInterface;
 
 // Test Target Classes
@@ -164,9 +164,8 @@ class FieldAnnotationNamedInjection
         $this->arg0 = $arg0;
     }
 }
-class FieldAnnotationNamedInjectionEntityTrait
+class FieldAnnotationNamedInjectionEntityAbstract extends EntityAbstract 
 {
-    use EntityTrait;
     /**
     * @Inject({@Named("AnerisTest\DiDefinitionTest\Param0")})
     */
@@ -513,12 +512,12 @@ class DiDefinitionTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals($exp,$def->export());
     }
-    public function testFieldAnnotationNamedInjectionEntityTrait()
+    public function testFieldAnnotationNamedInjectionEntityAbstract()
     {
         $annotationManager = AnnotationManager::factory();
-        $def = new Definition('AnerisTest\DiDefinitionTest\FieldAnnotationNamedInjectionEntityTrait',$annotationManager);
+        $def = new Definition('AnerisTest\DiDefinitionTest\FieldAnnotationNamedInjectionEntityAbstract',$annotationManager);
         $exp = array(
-            'class' => 'AnerisTest\DiDefinitionTest\\FieldAnnotationNamedInjectionEntityTrait',
+            'class' => 'AnerisTest\DiDefinitionTest\\FieldAnnotationNamedInjectionEntityAbstract',
             'constructor' => null,
             'injects' => array (
                 'setArg0' => array (

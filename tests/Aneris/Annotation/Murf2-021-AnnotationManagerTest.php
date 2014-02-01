@@ -2,7 +2,7 @@
 namespace AnerisTest\AnnotationManagerTest;
 
 use Aneris\Stdlib\Cache\CacheFactory;
-use Aneris\Stdlib\Entity\EntityTrait;
+use Aneris\Stdlib\Entity\EntityAbstract;
 use ReflectionClass;
 use Doctrine\Common\Annotations\SimpleAnnotationReader as DoctrineSimpleAnnotationReader;
 use Doctrine\Common\Annotations\AnnotationReader as DoctrineAnnotationReader;
@@ -136,9 +136,8 @@ class Test12
 class TestEntityIncludeNotAnnotation {
     public $id;
 }
-class Product
+class Product extends EntityAbstract
 {
-    use EntityTrait;
     /** @Max(10) @GeneratedValue **/
     protected $id;
     /** @Min(10) @Column **/
@@ -149,9 +148,8 @@ class Product
 /**
 * @Form(attributes={"method"="POST"})
 */
-class Product2
+class Product2 extends EntityAbstract
 {
-    use EntityTrait;
     /**
     * @Max(value=10) @GeneratedValue 
     */
@@ -614,6 +612,39 @@ EOD;
     }
 
     /**
+     * @requires PHP 5.4.0
+     */
+    public function testFromClassWithTrait()
+    {
+        require_once ANERIS_TEST_RESOURCES.'/AcmeTest/Annotation/Entity/class_with_trait.php';
+        $reader = new AnnotationManager();
+        $reader->addNameSpace('Doctrine\ORM\Mapping');
+        $reader->addNameSpace('Aneris\Validator\Constraints');
+        $classRef = new ReflectionClass('AcmeTest\Annotation\Entity\Product2WithTrait');
+
+        $annotations['__CLASS__'] = $reader->getClassAnnotations($classRef);
+        $this->assertEquals(1,count($annotations['__CLASS__']));
+        $this->assertEquals('Aneris\Form\Element\Form',get_class($annotations['__CLASS__'][0]));
+        $propertyRefs = $classRef->getProperties();
+        foreach($propertyRefs as $propertyRef) {
+            $annotations[$propertyRef->getName()] = $reader->getPropertyAnnotations($propertyRef);
+        }
+        $this->assertEquals(2,count($annotations['id']));
+        $this->assertEquals('Aneris\Validator\Constraints\Max',get_class($annotations['id'][0]));
+        $this->assertEquals('Doctrine\ORM\Mapping\GeneratedValue',get_class($annotations['id'][1]));
+        $this->assertEquals(3,count($annotations['id2']));
+        $this->assertEquals('Doctrine\ORM\Mapping\Column',get_class($annotations['id2'][0]));
+        $this->assertEquals('Aneris\Validator\Constraints\Max',get_class($annotations['id2'][1]));
+        $this->assertEquals('Aneris\Validator\Constraints\Max',get_class($annotations['id2'][2]));
+        $this->assertEquals(2,count($annotations['stock']));
+        $this->assertEquals('Doctrine\ORM\Mapping\Column',get_class($annotations['stock'][0]));
+        $this->assertEquals('Aneris\Validator\Constraints\CList',get_class($annotations['stock'][1]));
+        $this->assertEquals(2,count($annotations['stock'][1]->value));
+        $this->assertEquals('Aneris\Validator\Constraints\Max',get_class($annotations['stock'][1]->value[0]));
+        $this->assertEquals('Aneris\Validator\Constraints\Max',get_class($annotations['stock'][1]->value[1]));
+    }
+
+    /**
      * @expectedException        Aneris\Annotation\Exception\DomainException
      * @expectedExceptionMessage the class is not annotation class.: AnerisTest\AnnotationManagerTest\Test3 in AnerisTest\AnnotationManagerTest\TestEntityIncludeNotAnnotation:
      */
@@ -625,6 +656,9 @@ EOD;
         $annotations = $reader->getClassAnnotations($classRef);
     }
 
+    /**
+     * @requires PHP 5.4.0
+     */
     public function testNamespaceExtractor()
     {
         $parser = new NameSpaceExtractor(ANERIS_TEST_RESOURCES.'/annotation/namespace.php');
@@ -641,6 +675,24 @@ EOD;
         $this->assertEquals('AnerisTest\AnnotationManagerTest\Foo\MyClass',$classes[0]);
         $this->assertEquals('AnerisTest\AnnotationManagerTest\Foo\MyClass2',$classes[1]);
         $this->assertEquals('AnerisTest\AnnotationManagerTest\Bar\MyClass',$classes[2]);
+    }
+
+    public function testNamespaceExtractorWithoutTrait()
+    {
+        $parser = new NameSpaceExtractor(ANERIS_TEST_RESOURCES.'/annotation/namespace_without_trait.php');
+        $imports = $parser->getAllImports();
+        $this->assertEquals(3,count($imports));
+        $this->assertEquals(1,count($imports['AnerisTest\AnnotationManagerTest\FooWithoutTrait']));
+        $this->assertEquals(1,count($imports['AnerisTest\AnnotationManagerTest\BarWithoutTrait']));
+        $this->assertEquals(2,count($imports['__TOPLEVEL__']));
+        $this->assertEquals('Aneris\Stdlib\ListCollection',$imports['AnerisTest\AnnotationManagerTest\FooWithoutTrait']['ListCollection']);
+        $this->assertEquals('Aneris\Stdlib\PriorityQueue',$imports['AnerisTest\AnnotationManagerTest\BarWithoutTrait']['ListCollection']);
+        $this->assertEquals('stdClass',$imports['__TOPLEVEL__']['ListCollection']);
+        $this->assertEquals('Aneris\TestList',$imports['__TOPLEVEL__']['TestList']);
+        $classes = $parser->getAllClass();
+        $this->assertEquals('AnerisTest\AnnotationManagerTest\FooWithoutTrait\MyClass',$classes[0]);
+        $this->assertEquals('AnerisTest\AnnotationManagerTest\FooWithoutTrait\MyClass2',$classes[1]);
+        $this->assertEquals('AnerisTest\AnnotationManagerTest\BarWithoutTrait\MyClass',$classes[2]);
     }
 
     public function testImportsAbsolute()

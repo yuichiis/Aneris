@@ -2,7 +2,7 @@
 namespace AnerisTest\DiContainerTest;
 
 use Aneris\Stdlib\Entity\PropertyAccessPolicyInterface;
-use Aneris\Stdlib\Entity\EntityTrait;
+use Aneris\Stdlib\Entity\EntityAbstract;
 
 use Aneris\Container\ServiceLocatorInterface;
 
@@ -205,10 +205,8 @@ class SetterInjectionClass
     }
 }
 
-class PropertyInjectionClass
+class PropertyInjectionClass extends EntityAbstract
 {
-    use EntityTrait;
-
     protected $arg0;
     protected $arg1;
 }
@@ -239,9 +237,8 @@ class DefaultValueClass
     }
 }
 
-class FieldAnnotationInjection
+class FieldAnnotationInjection extends EntityAbstract
 {
-    use EntityTrait;
     /**
     * @Inject({@Named("AnerisTest\DiContainerTest\Param0")})
     */

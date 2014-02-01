@@ -1,8 +1,7 @@
 <?php
 namespace AnerisTest\ValidatorValidatorTest;
 
-use Aneris\Stdlib\Entity\EntityInterface;
-use Aneris\Stdlib\Entity\EntityTrait;
+use Aneris\Stdlib\Entity\EntityAbstract;
 use Aneris\Stdlib\Entity\PropertyAccessPolicyInterface;
 use Aneris\Container\ModuleManager;
 use Aneris\Stdlib\I18n\Gettext;
@@ -29,9 +28,8 @@ use Aneris\Validator\Constraints\NotNull;
 use Aneris\Validator\Constraints\Size;
 use Aneris\Validator\Constraints\GroupSequence;
 
-class Product implements EntityInterface
+class Product extends EntityAbstract
 {
-    use EntityTrait;
     /** @Max(10) **/
     protected $id;
     /** @Min(10) **/
@@ -40,20 +38,16 @@ class Product implements EntityInterface
     protected $stock;
 }
 
-class Product2 implements EntityInterface
+class Product2 extends EntityAbstract
 {
-    use EntityTrait;
-    
     /** @Min(10) **/
     protected $id;
     /** @Max(value=100, message="stock max is {value}.") **/
     protected $stock;
 }
 
-class Product3 implements EntityInterface
+class Product3 extends EntityAbstract
 {
-    use EntityTrait;
-    
     /** @Max(10) **/
     protected $id;
     /** @Size(max=10, message="name max length is {max}.") **/
@@ -64,18 +58,16 @@ class Product3 implements EntityInterface
     protected $code;
 }
 
-class Product4 implements EntityInterface
+class Product4 extends EntityAbstract
 {
-    use EntityTrait;
     /** @Max(10) @NotNull **/
     protected $id;
     /** @Max(100)  @NotNull **/
     protected $stock;
 }
 
-class Product5 implements EntityInterface
+class Product5 extends EntityAbstract
 {
-    use EntityTrait;
     /** @Max(10) **/
     protected $id;
     /** @Size(min=8) **/
@@ -97,9 +89,8 @@ class Product6 implements PropertyAccessPolicyInterface
     public $stock;
 }
 
-class Product7 implements EntityInterface
+class Product7 extends EntityAbstract
 {
-    use EntityTrait;
     /** @Max(value=10) **/
     public $id;
     /**
@@ -113,9 +104,8 @@ class Product7 implements EntityInterface
     public $stock;
 }
 
-class Product8 implements EntityInterface
+class Product8 extends EntityAbstract
 {
-    use EntityTrait;
     /** @Max(10) **/
     protected $id;
     /**
@@ -127,9 +117,8 @@ class Product8 implements EntityInterface
     public $id2;
 }
 
-class Product9 implements EntityInterface
+class Product9 extends EntityAbstract
 {
-    use EntityTrait;
     /** @Test **/
     protected $id;
     /**
@@ -146,9 +135,8 @@ class Product9 implements EntityInterface
 /**
  * @GroupSequence({"a","b","c"})
  */
-class Product10 implements EntityInterface
+class Product10 extends EntityAbstract
 {
-    use EntityTrait;
     /** @Max(value=10,groups={"c"}) **/
     protected $id;
     /** @Max(value=10,groups={"b"}) **/
@@ -207,9 +195,8 @@ class Test2Validator implements ConstraintValidatorInterface
     }
 }
 
-class ProductSymfony
+class ProductSymfony extends EntityAbstract
 {
-    use EntityTrait;
     /** @SymfonyAssert\LessThanOrEqual(10) **/
     protected $id;
     /** @SymfonyAssert\LessThanOrEqual(10) **/
