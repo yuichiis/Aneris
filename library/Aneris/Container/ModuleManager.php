@@ -201,6 +201,7 @@ class ModuleManager
             throw new Exception\DomainException('The Module do not have invokable method for invokables configuration:'.$moduleName.'::'.$method);
 
         if(isset($config['config_injector'])) {
+            print_r($config);
             $module_config = $this->serviceContainer->get('config');
             $config_injector = $config['config_injector'];
             $instance->$config_injector($module_config);
