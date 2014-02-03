@@ -4,7 +4,7 @@ parameters:
     aneris.container.module_manager.config_path: "%kernel.root_dir%/config/aneris.php"
     aneris.container.service_locator.class: Aneris\Container\Container
     aneris.container.service_locator_factory.class: Aneris\Bundle\AnerisBundle\DependencyInjection\ServiceLocatorFactory
-    aneris.i18n.translator.class: Aneris\Stdlib\I18n\Gettext
+    aneris.i18n.translator.class: Aneris\Stdlib\I18n\Translator
     aneris.i18n.translator.proxy.class: Aneris\Bundle\AnerisBundle\DependencyInjection\TranslatorProxy
     aneris.validator.validator.class: Aneris\Validator\Validator
     aneris.validator.validator_factory.class: Aneris\Bundle\AnerisBundle\DependencyInjection\ValidatorFactory

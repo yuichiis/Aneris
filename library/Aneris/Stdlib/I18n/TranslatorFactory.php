@@ -3,12 +3,12 @@ namespace Aneris\Stdlib\I18n;
 
 use Aneris\Container\ServiceLocatorInterface;
 
-class GettextFactory
+class TranslatorFactory
 {
     public static function factory($serviceManager)
     {
         $config = $serviceManager->get('config');
-        $translator = new Gettext();
+        $translator = new Translator();
         if(isset($config['translator'])) {
             $config = $config['translator'];
 

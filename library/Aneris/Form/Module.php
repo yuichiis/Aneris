@@ -20,7 +20,7 @@ class Module
                     'Aneris\Form\View\FormRenderer'  => array(
                         'constructor_args' => array(
                             'themes' => array('ref' => 'Aneris\Form\Config\Themes'),
-                            'translator' => array('ref' => 'Aneris\Stdlib\I18n\GettextService'),
+                            'translator' => array('ref' => 'Aneris\Stdlib\I18n\TranslatorService'),
                             'textDomain' => array('ref' => 'Aneris\Form\Config\TranslatorTextDomain'),
                         ),
                     ),

@@ -975,7 +975,7 @@ EOT;
         $sm = $moduleManager->getServiceLocator();
         $builder = $sm->get('Aneris\Form\FormContextBuilder');
         $renderer = $sm->get('Aneris\Form\View\FormRenderer');
-        $translator = $sm->get('Aneris\Stdlib\I18n\Gettext');
+        $translator = $sm->get('Aneris\Stdlib\I18n\Translator');
         $translator->setLocale('en_US');
 
         $entity = new Entity3();

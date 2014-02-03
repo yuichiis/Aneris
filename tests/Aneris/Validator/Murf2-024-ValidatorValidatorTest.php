@@ -4,7 +4,7 @@ namespace AnerisTest\ValidatorValidatorTest;
 use Aneris\Stdlib\Entity\EntityAbstract;
 use Aneris\Stdlib\Entity\PropertyAccessPolicyInterface;
 use Aneris\Container\ModuleManager;
-use Aneris\Stdlib\I18n\Gettext;
+use Aneris\Stdlib\I18n\Translator;
 use Aneris\Annotation\DoctrinePortability;
 use Aneris\Module\Doctrine\AnnotationReaderProxy;
 use Doctrine\Common\Annotations\AnnotationReader as DoctrineAnnotationReader;
@@ -380,7 +380,7 @@ class ValidatorValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testI18nTranslator()
     {
-        $translator = new Gettext();
+        $translator = new Translator();
         $translator->bindTextDomain(
             Validator::getTranslatorTextDomain(),
             Validator::getTranslatorBasePath()
@@ -819,7 +819,7 @@ class ValidatorValidatorTest extends \PHPUnit_Framework_TestCase
         );
         $moduleManager = new ModuleManager($config);
         $sm = $moduleManager->getServiceLocator();
-        $translator = $sm->get('Aneris\Stdlib\I18n\Gettext');
+        $translator = $sm->get('Aneris\Stdlib\I18n\Translator');
         $translator->setLocale('ja_JP');
         $validator = $sm->get('Aneris\Validator\Validator');
 

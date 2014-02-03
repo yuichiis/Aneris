@@ -13,7 +13,7 @@ class Module
                 'components' => array(
                     'Aneris\Validator\Validator' => array(
                         'constructor_args' => array(
-                            'translator' => array('ref' => 'Aneris\Stdlib\I18n\GettextService'),
+                            'translator' => array('ref' => 'Aneris\Stdlib\I18n\TranslatorService'),
                             'constraintManager' => array('ref' => 'Aneris\Validator\ConstraintContextBuilder'),
                         ),
                         'properties' => array(

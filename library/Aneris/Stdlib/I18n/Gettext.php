@@ -1,156 +1,149 @@
 <?php
 namespace Aneris\Stdlib\I18n;
-
 class Gettext
 {
-    const ENVIRONMENT_VAR = "LC_MESSAGES";
-    protected static $initialized;
+    const MAGIC_BIGENDIAN    = '950412de';
+    const MAGIC_LITTLEENDIAN = 'de120495';
 
-    protected $currentDomain = 'messages';
-    protected $currentLocale = false;
+    static protected $instance;
+    protected $textdomainPath;
+    protected $textDomain;
+    protected $endian;
+    protected $domain='message';
+    protected $locale='C';
 
-    public static function initialize()
+    public static function factory()
     {
-        if(self::$initialized)
-            return;
-        self::$initialized = true;
-
-        $current = getenv("LC_ALL");
-        if($current===false)
-            return;
-
-        putenv("LC_ALL");
-        if(getenv("LC_COLLATE")===false)
-            putenv("LC_COLLATE=".$current);
-        if(getenv("LC_CTYPE")===false)
-            putenv("LC_CTYPE=".$current);
-        if(getenv("LC_MONETARY")===false)
-            putenv("LC_MONETARY=".$current);
-        if(getenv("LC_NUMERIC")===false)
-            putenv("LC_NUMERIC=".$current);
-        if(getenv("LC_TIME")===false)
-            putenv("LC_TIME=".$current);
-        if(getenv("LC_MESSAGES")===false)
-            putenv("LC_MESSAGES=".$current);
-        if(defined("LC_MESSAGES")) {
-            setlocale(LC_ALL, null);
-            setlocale(LC_MESSAGES, null);
-        }
-    }
-
-    public function __construct()
-    {
-        self::initialize();
-        $this->currentDomain = textdomain(null);
-        $this->currentLocale = getenv(self::ENVIRONMENT_VAR);
+        if(!isset(self::$instance))
+            self::$instance = new self();
+        return self::$instance;
     }
 
     public function bindTextDomain($domain, $path)
     {
-        bindtextdomain($domain,$path);
-        return $this;
-    }
-
-    public function bindTextDomainCodeset($domain, $codeset)
-    {
-        bind_textdomain_codeset($domain,$codeset);
+        $this->textdomainPath[$domain] = $path;
         return $this;
     }
 
     public function setLocale($locale)
     {
-        $this->currentLocale = $locale;
-        return $this;
+        $this->locale = $locale;
     }
 
-    public function getLocale()
+    public function textDomain($domain)
     {
-        return $this->currentLocale;
+        $this->domain = $domain;
     }
 
-    public function setTextDomain($domain)
+    public function getText($message,$domain=null,$locale=null)
     {
-        $this->currentDomain = $domain;
-        return $this;
+        if($domain===null)
+            $domain = $this->domain;
+        if($locale===null)
+            $locale = $this->locale;
+
+        if(isset($this->textDomain[$domain][$locale])) {
+            $textDomain = $this->textDomain[$domain][$locale];
+        } else {
+            $textDomain = $this->getTextDomain($domain,$locale);
+            if($textDomain===false)
+                $textDomain = array();
+            $this->textDomain[$domain][$locale] = $textDomain;
+        }
+        if(isset($textDomain[$message]))
+            return $this->textDomain[$domain][$locale][$message];
+        else
+            return $message;
     }
 
-    public function setup($domain=null,$path=null,$locale=null)
+    public function getTextDomain($domain,$locale)
     {
-        if($locale!==null)
-            $this->setLocale($locale);
-        if($domain!==null && $path!=null)
-            $this->bindTextDomain($domain,$path);
-        if($domain!==null)
-            $this->setTextDomain($domain);
-        return $this;
+        if(!isset($this->textdomainPath[$domain]))
+            return false;
+        $filename = $this->textdomainPath[$domain].'/'.$locale.'/LC_MESSAGES/'.$domain.'.mo';
+        $fd = @fopen($filename, 'rb');
+        if($fd===false)
+            return false;
+        try {
+            $header = $this->readHeader($fd);
+            $textDomain = $this->buildTextDomain($fd,$header);
+        }
+        catch(\Exception $e) {
+            fclose($fd);
+            throw $e;
+        }
+        fclose($fd);
+        return $textDomain['text'];
     }
 
-    private function adjustEnvironment()
+    public function readHeader($fd)
     {
-        if(getenv(self::ENVIRONMENT_VAR) !== $this->currentLocale && $this->currentLocale!==null) {
-            if($this->currentLocale===false) {
-                putenv(self::ENVIRONMENT_VAR);
-                if(defined("LC_MESSAGES")) {
-                    setlocale(LC_MESSAGES, null);
-                }
+        $headerStr = fread($fd,32);
+        $magic = unpack('Nmagic',substr($headerStr,0,4));
+        $magicStr = dechex($magic['magic']);
+        if($magicStr===self::MAGIC_BIGENDIAN)
+            $this->endian = 'N';
+        else if($magicStr===self::MAGIC_LITTLEENDIAN)
+            $this->endian = 'V';
+        else
+            throw new Exception\DomainException('header error.: '.dechex($magic['magic']) );
+        $endian = $this->endian;
+        $header = unpack("${endian}magic/${endian}version/${endian}num_string/${endian}offset_original/${endian}offset_translation/${endian}size_hash/${endian}offset_hash",$headerStr);
+
+        return $header;
+    }
+
+    public function buildTextDomain($fd,$header)
+    {
+        $textDomain = array();
+        $mimeHeader = '';
+        $originalIndexs = $this->readStringTable($fd,$header['offset_original'],$header['num_string']);
+        $translationIndexs = $this->readStringTable($fd,$header['offset_translation'],$header['num_string']);
+        $headerIndex = false;
+        foreach ($originalIndexs as $index => $stringIndex) {
+            if($stringIndex['length']>0) {
+                if(fseek($fd, $stringIndex['offset'])!=0)
+                    throw new Exception\DomainException('seek error in original string.');
+                $original[$index] = fread($fd,$stringIndex['length']);
+            } else {
+                $headerIndex = $index;
             }
-            else {
-                putenv(self::ENVIRONMENT_VAR.'='.$this->currentLocale);
-                if(defined("LC_MESSAGES")) {
-                    setlocale(LC_MESSAGES, $this->currentLocale);
-                }
+        }
+        foreach ($translationIndexs as $index => $stringIndex) {
+            if($stringIndex['length']>0) {
+                if(fseek($fd, $stringIndex['offset'])!=0)
+                    throw new Exception\DomainException('seek error in original string.');
+                $text = fread($fd,$stringIndex['length']);
+                if($headerIndex===$index)
+                    $mimeHeader = $text;
+                else
+                    $textDomain[$original[$index]] = $text;
+            } else {
+                $textDomain[$original[$index]] = '';
             }
         }
-
-        if(textdomain(null) !== $this->currentDomain && $this->currentDomain!==null) {
-            textdomain($this->currentDomain);
-        }
+        return array('header' => $mimeHeader, 'text' => $textDomain);
     }
 
-    public function translate($message, $domain=null, $locale=null)
+    protected function readStringTable($fd,$offset,$count)
     {
-        if($locale) {
-            $backupLocale = $this->currentLocale;
-            $this->currentLocale = $locale;
+        if(fseek($fd, $offset)!=0)
+            throw new Exception\DomainException('seek error in string table.');
+        $size = 8*$count;
+        $tableStr = fread($fd,$size);
+        $endian = $this->endian;
+        $format = "${endian}length/${endian}offset";
+        for ($i=0; $i<$size; $i+=8) {
+            $data = substr($tableStr,$i,8);
+            $stringTable[] = unpack($format, $data);
         }
-        if($domain) {
-            $backupDomain = $this->currentDomain;
-            $this->currentDomain = $domain;
-        }
-
-        $this->adjustEnvironment();
-        $result = gettext($message);
-
-        if($locale) {
-            $this->currentLocale = $backupLocale;
-        }
-        if($domain) {
-            $this->currentDomain = $backupDomain;
-        }
-
-        return $result;
+        return $stringTable;
     }
 
-    public function translatePlural($singular, $plural, $number, $domain=null, $locale=null)
+    protected function readHashTable($fd,$offset,$size)
     {
-        if($locale) {
-            $backupLocale = $this->currentLocale;
-            $this->currentLocale = $locale;
-        }
-        if($domain) {
-            $backupDomain = $this->currentDomain;
-            $this->currentDomain = $domain;
-        }
-
-        $this->adjustEnvironment();
-        $result = ngettext($singular, $plural, $number, $domain=null, $locale=null);
-
-        if($locale) {
-            $this->currentLocale = $backupLocale;
-        }
-        if($domain) {
-            $this->currentDomain = $backupDomain;
-        }
-        return $result;
+        if(fseek($fd,$offset)!=0)
+            throw new Exception\DomainException('seek error in hash table.');
+        return fread($fd,$size);
     }
 }
