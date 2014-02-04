@@ -13,7 +13,7 @@ class ModuleManagerTest extends \PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         $loader = AutoLoader::factory();
-        $loader->setNameSpace('AcmeTest',ANERIS_TEST_RESOURCES.'/AcmeTest');
+        $loader->add('AcmeTest',ANERIS_TEST_RESOURCES);
     }
 
     public function setUp()

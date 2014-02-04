@@ -10,60 +10,76 @@ class AutoLoader
     {
         if(self::$_instance === null)
             self::$_instance = new self();
+        spl_autoload_register(array(self::$_instance, 'autoload'));
         return self::$_instance;
     }
 
     public static function factory(array $config = array())
     {
-        if(self::$_instance)
-            return self::$_instance;
-
         $autoloader = self::getInstance();
         if(isset($config['namespaces']))
-            $autoloader->setNameSpaces($config['namespaces']);
-
-        spl_autoload_register(array($autoloader, 'autoload'));
+            $autoloader->addNameSpaces($config['namespaces']);
         return $autoloader;
     }
 
     public function autoload($className)
     {
-        list($path,$subClassName) = $this->mapping($className);
-        $subClassName = str_replace('\\','/',$subClassName);
-        $filename = $path.'/'.$subClassName.'.php';
-        if(file_exists($filename)) {
-            include_once $filename;
+        list($paths,$filename) = $this->mapping($className);
+        if($paths) {
+            if($this->includeFile($paths,$filename))
+                return;
+        }
+        if(isset($this->namespaces['__ROOT__'])) {
+            if($this->includeFile($this->namespaces['__ROOT__'],$filename))
+                return;
         }
     }
 
-    private function setNameSpaces(array $namespaces)
+    private function includeFile($paths,$filename)
     {
-        $this->namespaces = $namespaces;
+        foreach ($paths as $path) {
+            $fullfilename = $path.'/'.$filename;
+            if(file_exists($fullfilename)) {
+                include_once $fullfilename;
+                return true;
+            }
+        }
+        return false;
     }
 
-     public function setNameSpace($namespace,$path)
+    public function addNameSpaces(array $namespaces)
     {
-        $this->namespaces[$namespace] = $path;
+        foreach($namespaces as $namespace => $path) {
+            $this->namespaces[$namespace][] = $path;
+        }
+    }
+
+    public function add($namespace,$path)
+    {
+        if(empty($namespace))
+            $namespace = '__ROOT__';
+        $this->namespaces[$namespace][] = $path;
     }
 
     private function mapping($className)
     {
-        $pos = strpos($className,'\\');
-        if($pos===false) {
-            return null;
+        if(false !== $pos = strpos($className,'\\')) {
+            $separator = '\\';
+        } else if(false !== $pos = strpos($className,'_')){
+            $separator = '_';
         }
-        $namePrefix = substr($className,0,$pos);
-        if(empty($namePrefix)) {
-            return null;
+        $paths = null;
+        if($pos!==false) {
+            $namePrefix = substr($className,0,$pos);
+            if(!empty($namePrefix)) {
+                if(isset($this->namespaces[$namePrefix])) {
+                    $paths = $this->namespaces[$namePrefix];
+                }
+            }
+            $filename = str_replace($separator, '/', $className).'.php';
+        } else {
+            $filename = $className.'.php';
         }
-        $subClassName = substr($className,$pos+1);
-        if(empty($subClassName)) {
-            return null;
-        }
-        if(!isset($this->namespaces[$namePrefix])) {
-            return null;
-        }
-        $path = $this->namespaces[$namePrefix];
-        return array($path,$subClassName);
+        return array($paths,$filename);
     }
 }

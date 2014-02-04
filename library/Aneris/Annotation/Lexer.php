@@ -52,7 +52,6 @@ class Lexer
                     case T_EVAL:
                     case T_ARRAY:
                     case T_AS:
-                    case T_CALLABLE:
                     case T_CASE:
                     case T_CATCH:
                     case T_CLASS:
@@ -125,6 +124,11 @@ class Lexer
                         array_unshift($this->splited,'(');
                         $code = '(';
                         $text = '(';
+                        break;
+                    default:
+                        if(defined("T_CALLABLE") && $code==T_CALLABLE) {
+                            $code=T_STRING;
+                        }
                         break;
                 }
             } else {

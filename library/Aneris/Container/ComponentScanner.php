@@ -61,6 +61,8 @@ class ComponentScanner
 
     protected function scanFile($filename)
     {
+        if(substr($filename,-4,4)!=='.php')
+            return $this;
         require_once $filename;
         $parser = new NameSpaceExtractor($filename);
         $classes = $parser->getAllClass();

@@ -94,11 +94,13 @@ class PhpTest extends \PHPUnit_Framework_TestCase
     public static function tearDownAfterClass()
     {
 		\Aneris\Stdlib\Cache\CacheFactory::clearFileCache();
+/*
         putenv("LC_ALL");
         putenv("LC_MESSAGES");
         setlocale(LC_ALL, null);
 		if(defined("LC_MESSAGES"))
 	        setlocale(LC_MESSAGES, null);
+*/
     }
 	//public function testNamespaceAtParentClass()
 	//{
@@ -151,6 +153,7 @@ class PhpTest extends \PHPUnit_Framework_TestCase
         $result = require $filename;
         $this->assertEquals($definition,$result);
 	}
+/*
 	public function testgettext()
 	{
 		$this->assertTrue(function_exists('gettext'));
@@ -235,6 +238,7 @@ class PhpTest extends \PHPUnit_Framework_TestCase
 		$text = gettext("{aneris.test.phptest.gettext.messages}");
 		$this->assertEquals('Welcome to My PHP Application',$text);
 	}
+*/
     public function testSerialize()
     {
         //$this->assertEquals(3, count($instance->logData));
