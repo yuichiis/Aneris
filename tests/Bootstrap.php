@@ -1,6 +1,6 @@
 <?php
 date_default_timezone_set('UTC');
-
+#ini_set('short_open_tag',true);
 include 'init_autoloader.php';
 $loader->add('AcmeTest', __DIR__ . '/resources');
 $loader->add('SfTest',   __DIR__ . '/AnerisBundle/src');

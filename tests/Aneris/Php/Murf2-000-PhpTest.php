@@ -63,15 +63,6 @@ class SubProtectedConstruct extends ProtectedConstruct
 	}
 }
 
-class Prototyping
-{
-    public function FunctionName(
-        array $arrayVar,
-        callable $callableVar)
-    {
-        # code...
-    }
-}
 
 interface HaveReferenceParamInterface
 {
@@ -404,8 +395,12 @@ EOD;
         $this->assertEquals($result, $interfaces);
     }
 
+    /**
+     * @requires PHP 5.4.0
+     */
     public function testPrototyping()
     {
+        require_once ANERIS_TEST_RESOURCES.'/AcmeTest/Php/php_5_4.php';
         $i = new Prototyping();
         $callable = array($i,'FunctionName');
         $arrayVar = array();
@@ -413,11 +408,13 @@ EOD;
     }
 
     /**
+     * @requires PHP 5.4.0
      * @expectedException        PHPUnit_Framework_Error
      * @expectedExceptionMessage Argument 2 passed to AnerisTest\PhpTest\Prototyping::FunctionName() must be callable, array given, called in
      */
     public function testPrototypingError()
     {
+        require_once ANERIS_TEST_RESOURCES.'/AcmeTest/Php/php_5_4.php';
         $i = new Prototyping();
         $callable = array($i,'None');
         $arrayVar = array();
