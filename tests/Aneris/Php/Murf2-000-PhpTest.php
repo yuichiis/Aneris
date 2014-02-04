@@ -106,7 +106,7 @@ class PhpTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertTrue(extension_loaded('apc'));
         $this->assertTrue(function_exists('apc_fetch'));
-        //$this->assertEquals('1',ini_get('apc.enable_cli'));
+        $this->assertEquals('1',ini_get('apc.enable_cli'));
         $bar = 'BAR';
         apc_add('foo', $bar);
         $this->assertEquals('BAR',apc_fetch('foo'));
