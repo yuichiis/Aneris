@@ -345,6 +345,14 @@ EOD;
     	$this->assertFalse(is_subclass_of($baseclass,'AnerisTest\PhpTest\BaseClass'));
     	$subclass = new SubClass();
     	$this->assertTrue(is_subclass_of($subclass,'AnerisTest\PhpTest\BaseClass'));
+    }
+
+    /**
+     * @requires PHP 5.3.7
+     */
+    public function test_is_subclass_of_interface()
+    {
+        $subclass = new SubClass();
     	$this->assertTrue(is_subclass_of($subclass,'AnerisTest\PhpTest\FooInterface'));
     }
 
