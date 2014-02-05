@@ -5,7 +5,9 @@
     "keywords": ["framework"],
     "license": "Apache2.0",
     "require": {
-        "php": ">=5.3.3",
+        "php": ">=5.3.3"
+    },
+    "require-dev": {
         "doctrine/orm": "2.4.*",
         "twig/extensions": "1.*",
         "symfony/symfony": "2.4.*",
@@ -15,6 +17,23 @@
         "zendframework/zendframework": ">2.2.0rc1",
         "doctrine/doctrine-orm-module": "*",
         "michelf/php-markdown": "*"
+    },
+    "suggest": {
+        "twig/extensions": "To use with Twig",
+        "doctrine/orm": "To use with Doctrine",
+        "symfony/symfony": "To Running on Symfony",
+        "symfony/monolog-bundle": "To Running on Symfony",
+        "symfony/assetic-bundle": "To Running on Symfony",
+        "symfony/swiftmailer-bundle": "To Running on Symfony",
+        "zendframework/zendframework": "To Running on ZF2",
+        "doctrine/doctrine-orm-module": "To use with Doctrine on ZF2",
+        "michelf/php-markdown": "For Markdown tests"
+    },
+    "autoload": {
+        "psr-0": {
+            "Aneris\\": "library/",
+            "AnerisZFModule\\": "library/"
+        }
     },
     "minimum-stability": "dev"
 }
