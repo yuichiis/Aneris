@@ -27,7 +27,7 @@
         "symfony/swiftmailer-bundle": "To Running on Symfony",
         "zendframework/zendframework": "To Running on ZF2",
         "doctrine/doctrine-orm-module": "To use with Doctrine on ZF2",
-        "michelf/php-markdown": "For Markdown tests"
+        "michelf/php-markdown": "For Markdown documents test"
     },
     "autoload": {
         "psr-0": {
