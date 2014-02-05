@@ -126,6 +126,34 @@ class PhpTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($obj2id,spl_object_hash($obj3->obj2));
     }
 
+    /**
+     * @requires extension apcu
+     */
+    public function testApcuExtension()
+    {
+        $this->assertTrue(extension_loaded('apc'));
+        $this->assertTrue(extension_loaded('apcu'));
+        $this->assertTrue(function_exists('apc_fetch'));
+        $this->assertEquals('1',ini_get('apc.enable_cli'));
+        $bar = 'BAR';
+        apc_add('foo', $bar);
+        $this->assertEquals('BAR',apc_fetch('foo'));
+        $bar = 'NEVER GETS SET';
+        apc_add('foo', $bar);
+        $this->assertEquals('BAR',apc_fetch('foo'));
+        //echo sys_get_temp_dir();
+        $obj1 = new stdClass();
+        $obj2 = new stdClass();
+        $obj2->var = 'var';
+        $obj1->obj2 = $obj2;
+        $obj2id = spl_object_hash($obj2);
+        apc_add('obj1',$obj1);
+        unset($obj2);
+        unset($obj1);
+        $obj3 = apc_fetch('obj1');
+        $this->assertEquals($obj2id,spl_object_hash($obj3->obj2));
+    }
+
 	public function testStringControlCode()
 	{
         //$this->assertTrue(false);

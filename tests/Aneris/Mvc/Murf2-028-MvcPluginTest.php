@@ -20,7 +20,7 @@ class Foo
     {
         return new self($pluginManager);
     }
-    protected function __invoke($value)
+    public function __invoke($value)
     {
         return $value.'!!';
     }
