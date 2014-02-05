@@ -12,7 +12,7 @@ matrix:
 
 before_script:
     - COMPOSER_ROOT_VERSION=dev-master composer --prefer-source --dev install
-    - sh -c 'echo "apc.enable_cli = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini'
+    - sh -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; echo "apc.enable_cli = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini'
     - sh -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm" ] && [ $(php -r "echo PHP_MINOR_VERSION;") -le 4 ]; then echo "extension = apc.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi;'
     - sh -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm" ] && [ $(php -r "echo PHP_MINOR_VERSION;") -ge 5 ]; then echo "zend_extension = opcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi;'
     - sh -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm" ] && [ $(php -r "echo PHP_MINOR_VERSION;") -le 3 ]; then echo "short_open_tag = On" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi;'
