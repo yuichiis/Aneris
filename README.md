@@ -1,5 +1,7 @@
 Wellcome to the Aneris Framework
 ================================
+Master: [![Build Status](https://travis-ci.org/yuichiis/Aneris.png?branch=master)](https://travis-ci.org/yuichiis/Aneris)
+Develop: [![Build Status](https://travis-ci.org/yuichiis/Aneris.png?branch=develop)](https://travis-ci.org/yuichiis/Aneris)
 
 The Aneris Framework is a PHP Application Framework that provides a modern programming and configuration model to all PHP programmers.
 Aneris is modular and your program will be modular and that is independence to PHP frameworks.
